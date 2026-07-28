@@ -1,27 +1,21 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
-const input = document.querySelector('input[name="delay"]');
-const form = document.querySelector('fieldset');
-const btn = document.querySelector('button');
+const form = document.querySelector('.form');
 
-let delay = null;
-let state = null;
-
-form.addEventListener('change', event => {
-  if (event.target.type === 'radio') {
-    state = event.target.value;
-  }
-});
-
-input.addEventListener('blur', event => {
-  delay = event.target.value;
-});
-
-btn.addEventListener('click', makePromise);
+form.addEventListener('submit', makePromise);
 
 function makePromise(event) {
   event.preventDefault();
+
+  const delay = form.elements.delay.value;
+  const state = form.elements.state.value;
+
+  event.currentTarget.reset();
+
+  console.log(delay);
+  console.log(state);
+
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (state === 'fulfilled') {
@@ -33,7 +27,7 @@ function makePromise(event) {
   })
     .then(value => {
       iziToast.show({
-        message: `✅ Fulfilled promise in ${delay}ms`,
+        message: `✅ Fulfilled promise in ${value}ms`,
         position: 'topRight',
         color: '#63975c',
         titleColor: '#fff',
@@ -42,7 +36,7 @@ function makePromise(event) {
     })
     .catch(error => {
       iziToast.show({
-        message: `❌ Rejected promise in ${delay}ms`,
+        message: `❌ Rejected promise in ${error}ms`,
         position: 'topRight',
         color: '#da2e28',
         titleColor: '#fff',
